@@ -1,24 +1,133 @@
-# Compiled class file
-*.class
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scenario Details</title>
+<style>
+body {
+font-family: Arial, sans-serif;
+background-color: #f4f4f4;
+margin: 0;
+padding: 20px;
+}
+.container {
+background: white;
+padding: 20px;
+border-radius: 8px;
+box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+max-width: 600px;
+margin: auto;
+}
+h2 {
+margin-bottom: 15px;
+}
+label {
+font-weight: bold;
+display: block;
+margin-top: 10px;
+}input, textarea {
+width: 100%;
+padding: 8px;
+margin-top: 5px;
+border: 1px solid #ccc;
+border-radius: 5px;
+}
+.toggle-switch {
+display: flex;
+align-items: center;
+margin-top: 10px;
+}
+.toggle-switch input {
+width: auto;
+margin-right: 10px;
+}
+.button-group {
+display: flex;
+justify-content: space-between;
+margin-top: 20px;
+}
+button {
+padding: 10px 20px;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+}
+.update {
+background-color: #28a745;
+color: white;
+}
+.cancel {
+background-color: #dc3545;
+color: white;
+}
+.convert-button {
+background-color: #007bff;
+color: white;
+font-size: 16px;
+text-align: center;
+padding: 10px;
+border-radius: 5px;
+text-decoration: none;
+display: block;
+margin-top: 20px;
+text-align: center;
+}
+</style>
+</head>
+<body>
+<div class="container">
+<h2>Scenario Details</h2>
+<form>
+<label for="name">Name *</label>
+<input type="text" id="name" name="name" value="COVID-19 - CORE PROTOCOL_ASYMPTOMATIC - Other Languages" required>
+<label for="description">Description (optional)</label>
+<textarea id="description" name="description">The CORE CDC COVID-19 Protocol split for asymptomatic pathway</textarea>
+<label for="scenario_id">Scenario ID *</label>
+<input type="text" id="scenario_id" name="scenario_id" value="covid19_core_asymptomatic_non_eng" required><label for="return_message">Returning message (optional)</label><textarea id="return_message" name="return_message">Commitment and Engagement. Risk Management. Organizational Competence.</textarea>
+<div class="toggle-switch">
+<input type="checkbox" id="interrupting_scenario">
+<label for="interrupting_scenario">Interrupting scenario</label>
+</div>
+<div class="toggle-switch">
+<input type="checkbox" id="breaking_scenario">
+<label for="breaking_scenario">Breaking scenario</label>
+</div>
+<div class="button-group">
+<button type="submit" class="update">Update</button>
+<button type="button" class="cancel">Cancel</button>
+</div>
+</form>
+<a href="#" class="convert-button">Convert to Word</a>
+</div>
+</body>
+</html>
 
-# Log file
-*.log
 
-# BlueJ files
-*.ctxt
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-# Package Files #
-*.jar
-*.war
-*.nar
-*.ear
-*.zip
-*.tar.gz
-*.rar
-
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
-replay_pid*
+<?php
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: POST");
+header("Content-Type: application/json");
+$data = json_decode(file_get_contents("php://input"), true);
+if ($data) {
+     $name = $data['name'] ?? '';
+    $description = $data['description'] ?? '';
+    $scenario_id = $data['scenario_id'] ?? '';
+    $return_message = $data['return_message'] ?? '';
+    $interrupting_scenario = $data['interrupting_scenario'] ?? false;
+    $breaking_scenario = $data['breaking_scenario'] ?? false;
+$formData = [
+        "name" => $name,
+        "description" => $description,
+        "scenario_id" => $scenario_id,
+        "return_message" => $return_message,
+        "interrupting_scenario" => $interrupting_scenario,
+        "breaking_scenario" => $breaking_scenario
+    ];
+    file_put_contents("form_data.json", json_encode($formData, JSON_PRETTY_PRINT));
+echo json_encode(["message" => "Form submitted successfully", "data" => $formData]);
+} else {
+    echo json_encode(["error" => "Invalid input"])
+}
+?>
